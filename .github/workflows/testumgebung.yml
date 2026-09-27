@@ -1,12 +1,14 @@
 name: Java-Testumgebung
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: testumgebung-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   testumgebung:
@@ -20,8 +22,8 @@ jobs:
       LC_ALL: C
       JAVA_TOOL_OPTIONS: -Dfile.encoding=${{ matrix.encoding }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
